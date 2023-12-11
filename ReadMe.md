@@ -2,7 +2,7 @@
 
 ## ASCII Art
 
-Given $p$ prime, $A, B \in \mathbb{Z}$, draw an ASCII art diagram of this curve.
+Given $p$ prime, $A, B \in \mathbb{Z}/p\mathbb{Z}$, draw an ASCII art diagram of this curve.
 
 Sample visible here for $y^2 = x^3 + 7$:
 
