@@ -1,0 +1,262 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Beamer Presentation
+% LaTeX Template
+% Version 1.0 (10/11/12)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND THEMES
+%----------------------------------------------------------------------------------------
+
+\documentclass{beamer}
+
+\mode<presentation> {
+
+% The Beamer class comes with a number of default slide themes
+% which change the colors and layouts of slides. Below this is a list
+% of all the themes, uncomment each in turn to see what they look like.
+
+\usetheme{Madrid}
+
+% As well as themes, the Beamer class has a number of color themes
+% for any slide theme. Uncomment each of these in turn to see how it
+% changes the colors of your current slide theme.
+
+%\usecolortheme{albatross}
+%\usecolortheme{beaver}
+%\usecolortheme{beetle}
+%\usecolortheme{crane}
+%\usecolortheme{dolphin}
+%\usecolortheme{dove}
+%\usecolortheme{fly}
+%\usecolortheme{lily}
+%\usecolortheme{orchid}
+%\usecolortheme{rose}
+%\usecolortheme{seagull}
+%\usecolortheme{seahorse}
+%\usecolortheme{whale}
+%\usecolortheme{wolverine}
+
+%\setbeamertemplate{footline} % To remove the footer line in all slides uncomment this line
+%\setbeamertemplate{footline}[page number] % To replace the footer line in all slides with a simple slide count uncomment this line
+
+%\setbeamertemplate{navigation symbols}{} % To remove the navigation symbols from the bottom of all slides uncomment this line
+}
+\usepackage{amssymb}
+\usepackage{graphicx} % Allows including images
+\usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
+
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\title[MOV attack on DLP for $E/\mathbb{F}_p$]{MOV attack on discrete logarithm problem for elliptic curves over finite fields} % The short title appears at the bottom of every slide, the full title is only on the title page
+
+\author{Veljko Vranić} % Your name
+\institute[] % Your institution as it will appear on the bottom of every slide, may be shorthand to save space
+{
+Elliptic curves and cryptography course \\ % Your institution for the title page
+\medskip
+\textit{byblos94@gmail.com}
+\date{\today} % Date, can be changed to a custom date
+}
+\begin{document}
+
+\begin{frame}
+\titlepage % Print the title page as the first slide
+\end{frame}
+
+\begin{frame}
+\frametitle{Overview} % Table of contents slide, comment this block out to remove it
+\tableofcontents % Throughout your presentation, if you choose to use \section{} and \subsection{} commands, these will automatically be printed on this slide as an overview of your presentation
+\end{frame}
+
+%----------------------------------------------------------------------------------------
+%	PRESENTATION SLIDES
+%----------------------------------------------------------------------------------------
+
+%------------------------------------------------
+\section{Problem statement} % Sections can be created in order to organize your presentation into discrete blocks, all sections and subsections are automatically printed in the table of contents as an overview of the talk
+%------------------------------------------------
+
+\begin{frame}
+\frametitle{Problem}
+
+The problem of finding value $k \in \mathbb{Z}$, such that $a = b^k$, for elements $a, b $ in some group $G$, is called a discrete logarithm problem.\\~\\
+
+In the world of elliptic curves, we know that its points with rational coordinates form a group.
+In that setup, the problem is formulated as trying to find value $k \in \mathbb{Z}$ such that $P=kQ$ for $P, Q$ points on an elliptic curve.  \\ ~ \\ 
+
+For practical purposes, algorithms on elliptic curves are always considered over finite fields, instead of $\mathbb{Q}$. In this specific case, the DLP problem will be considered over a finite field $\mathbb{F}_p$, where $p$ is a prime number.
+\end{frame}
+
+\begin{frame}
+\frametitle{Two similar problems}
+
+\begin{columns}[c] % The "c" option specifies centered vertical alignment while the "t" option is used for top vertical alignment
+
+\column{.40\textwidth} % Left column and width
+\begin{center}
+\textbf{DLP for $\mathbb{F}_{p^n}$} \\
+
+If $a, b \in \mathbb{F}_{p^n}$ and $b=a^k$\\
+find $k$. \\
+\end{center}
+
+\column{.1\textwidth} 
+\column{.45\textwidth} % Right column and width
+\begin{center}
+\textbf{DLP for $E/\mathbb{F}_p$} \\
+If $P, Q \in E/\mathbb{F}_{p}$ and $Q=kP$ \\
+find $k$.
+\end{center}
+\end{columns}
+
+\pause
+\begin{columns}[c] % The "c" option specifies centered vertical alignment while the "t" option is used for top vertical alignment
+
+\column{.45\textwidth} % Left column and width
+\begin{center}
+Computationally easy \\ (Index calculus)
+\end{center}
+
+\column{.1\textwidth} \\ 
+
+\column{.40\textwidth} % Right column and width
+\begin{center}
+Computationally hard \\ (Baby step, Giant step)
+\end{center}
+\end{columns}
+
+\end{frame}
+
+%------------------------------------------------
+
+\section{Pairing intro}
+\begin{frame}
+\frametitle{Weil pairing}
+Given elliptic curve $E/\mathbb{Q}$ and integer $m \geq 1$ \\
+$e_m: E[m] \times E[m] \mapsto$ m-th roots of unity (Weil pairing). \\ ~ \\
+Such that:
+\begin{itemize}
+    \item \textbf{B}illiear $e_m(P+T,Q) = e_m(P,Q)  e_m(T,Q)$ \pause 
+    \item \textbf{A}lternating $e_m(P,Q) = e_m(Q,P)^{-1}$ \pause 
+    \item \textbf{N}on-degenerate $(\forall Q) e_m(P, Q) = 1 \iff P = 0$
+\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}
+\frametitle{Roots of unity and finite fields}
+
+\begin{block}{Langrange's theorem - group theory}
+For any finite field $\mathbb{F}_{p^k}$, where $p$ is prime and $k \in \mathbb{N}$,\\
+if element $a \in \mathbb{F}_{p^k} \setminus \{0\}$, then $a^{p^k - 1} = 1$.
+\end{block} \pause
+
+\begin{block}{Corollary}
+$(p^k - 1)st$ roots of unity is a subset of $\mathbb{F}_{p^k}$, where $p$ is prime and $k \in \mathbb{N}$.
+\end{block} \pause
+
+\begin{block}{Weil pairing for finite fields}
+Elliptic curve $E / \mathbb{F}_p$ and integer $m \geq 1$ \\
+$e_m: E[m] \times E[m] \mapsto \mathbb{F}_{p^k}$, for sufficiently large $k$ such that $m | p^k-1$ and \textbf{BAN} properties are satisfied.
+\end{block}
+\end{frame}
+%------------------------------------------------
+\section{MOV Attack}
+
+\begin{frame}
+\frametitle{MOV attack - idea}
+The MOV attack is named after Menezes, Okamoto, and Vanstone. \\ ~ \\ \pause
+
+\begin{columns}[c] % The "c" option specifies centered vertical alignment while the "t" option is used for top vertical alignment
+
+\column{.35\textwidth} % Left column and width
+\begin{center}
+\textbf{DLP for $\mathbb{F}_{p^n}$} \\
+
+If $a, b \in \mathbb{F}_{p^n}$ and $b=a^k$\\
+find $k$. \\
+\end{center}
+
+\column{.25\textwidth} 
+\begin{center}
+Weil pairing \\
+{$\Longleftarrow$}
+\end{center}
+
+\column{.40\textwidth} % Right column and width
+\begin{center}
+\textbf{DLP for $E/\mathbb{F}_p$} \\
+If $P, Q \in E/\mathbb{F}_{p}$ and $Q=kP$ \\
+find $k$.
+\end{center}
+\end{columns}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{MOV attack}
+\textbf{Problem:} \\
+Elliptic curve $E/\mathbb{F}_p$, points $P,Q \in E(\mathbb{F}_p)$.
+Let $N$ be the order of point $P$, such that $(N,p) = 1$. Find $k$, such that $Q = kP$.
+
+\begin{enumerate}
+    \item Pick random point $T \in E[m]$, such that $P, T$ generates $E[m]$ \pause
+    \item Compute $$\zeta_1 = e_N(P,T) \in \mathbb{F}_{p^m}$$ 
+    $$\zeta_2 = e_N(Q,T) \in \mathbb{F}_{p^m}$$ for $m$ sufficiently big. \pause
+    \item This reduces the problem to solving for $k$ in $\mathbb{F}_{p^m}$
+     $$\zeta_2 = e_N(Q,T) = e_N(kP, T) = e_N(P,T)^k = \zeta_1^k $$ 
+\end{enumerate}
+\end{frame}
+
+\begin{frame}
+\frametitle{MOV attack - numeric example}
+\textbf{Problem:} \\
+Elliptic curve $y^2 = x^3 - x$ over $E/\mathbb{F}_{29}$ and $P(17, 13)$, $Q(17, 16)$. \\
+Find $k$, such that $Q=kP$. Order of $P$ is $4$. \\ ~ \\ 
+
+\begin{itemize}
+\item Checking $(N,p) = (4, 29) = 1$. \pause \checkmark \pause
+\item Choosing a random point $T$ from $E[N]$, such that points $P$ and $T$ generate $E[N]$. One such point is $T(12, 11)$.  \pause
+\item Calculating $\zeta_1 = e_4(P,T) = 28$ and $\zeta_2 = e_4(Q,T) = 28$ \\
+ Both are elements of $\mathbb{F}_{29}$ 
+ \end{itemize}
+ \end{frame}
+
+\begin{frame}
+\frametitle{MOV attack - numeric example continued}
+\begin{itemize}
+
+\item Solving $\zeta_2 = \zeta_1^k$ in $\mathbb{F}_{29}$  \\ 
+$$ \frac{\zeta_1}{\zeta_2} = \frac{e_4(P,T)}{e_4(Q,T)} = e_4(P-Q,T) = e_4(P-kP, T) = e_4(P,T)^{(1-k)} = \zeta_1^(1-k)$$
+$$ 1 = \frac{28}{28} = 28^{1-k} = -1^{(1-k)}$$ \\ ~ \\ \pause
+This is possible only if $k$ is odd and since $Q=kP$ and $4P = \infty$, the only options are $k= 1$ or $k=3$. As $P\neq Q$, we conclude that $k = 3$.
+
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{MOV attack - conclusion}
+
+Even though this attack is theoretically significant, in practice the value $m$ could be large, in which case the discrete log problem in the group $\mathbb{F}^\ast_{p^m}$ is just as hard as the original discrete log problem in $E(\mathbb{F}_p)$. \\ ~ \\ \pause
+However, the attack forced cryptographers to pay attention while choosing elliptic curves and avoid certain types of them (supersingular elliptic curves) that are vulnerable to this attack.
+\end{frame}
+%------------------------------------------------
+
+\begin{frame}
+\Huge{\centerline{The End}}
+\end{frame}
+
+%----------------------------------------------------------------------------------------
+
+\end{document}
